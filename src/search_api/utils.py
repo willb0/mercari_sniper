@@ -82,7 +82,7 @@ def get_driver() -> webdriver.Firefox:
     options = Options()
     options.add_argument('--disable-gpu')
     options.add_argument('--headless')
-    driver = webdriver.Firefox()
+    driver = webdriver.Firefox(options=options)
     return driver
 
 def get_page_source(driver:webdriver.Firefox,url:str):
@@ -102,7 +102,6 @@ def get_item_info(items:List[str]) -> List[MercariItem]:
     return_items = []
     for item in items:
         attrs = item.attrs
-        print(attrs)
         name = attrs['item-name']
         src = attrs['src']
         item_id = src.split('/')[-1].split('_')[0]
