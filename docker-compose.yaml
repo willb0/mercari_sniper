@@ -1,0 +1,9 @@
+services:
+  search_api:
+    build: ./src/search_api
+    ports:
+      - "80:80"
+    networks:
+      - main
+networks:
+  main:
