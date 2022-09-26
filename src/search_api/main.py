@@ -7,5 +7,6 @@ app = FastAPI()
 
 @app.post('/search_mercari')
 def search(request:SearchRequest) -> SearchResponse:
-    items = aggregate(request)
-    return SearchResponse(request=request,items=items)
+    url,items = aggregate(request)
+    return SearchResponse(url=url,request=request,items=items)
+    

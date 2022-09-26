@@ -1,4 +1,4 @@
-from typing import List,Dict
+from typing import List,Dict, Tuple
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.firefox.service import Service
@@ -8,7 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
 from bs4 import BeautifulSoup
-from models import MercariItem,SearchRequest
+from models import MercariItem,SearchRequest,Brand
 
 categories = {
     'all' : 2,
@@ -28,8 +28,9 @@ categories = {
 }
 
 brands = {
-    'number nine':873,
-    'bape': 136
+    'number nine':'873',
+    'bape': '136',
+    'visvim' : '273'
 }
 
 sizes_clothing = {
@@ -50,7 +51,7 @@ sizes_shoes = {
 }
 
 def gen_brands(brand:List[str]) -> str:
-    return '%2C'.join(map(lambda x:str(brands.get(x)),brand))
+    return '%2C'.join(map(lambda x:brands.get(x),brand))
 
 def gen_sizes(sizes:List[str],sz: Dict[str,int]) -> str:
     return '%2C'.join(map(lambda x:str(sz.get(x)),sizes))
@@ -110,9 +111,10 @@ def get_item_info(items:List[str]) -> List[MercariItem]:
         return_items.append(item)
     return return_items
 
-def aggregate(request:SearchRequest) -> List[MercariItem]:
+def aggregate(request:SearchRequest) -> Tuple[str,List[MercariItem]]:
     url = build_url(request)
     driver = get_driver()
     source = get_page_source(driver,url)
     items = extract_items(source)
-    return get_item_info(items)
+    info = get_item_info(items)
+    return (url,info)

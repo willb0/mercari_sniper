@@ -14,3 +14,5 @@ python3 -m venv env && source env/bin/activate
 pip install -r requirements.txt
 uvicorn src.search_api.main:app --reload
 ```
+
+hit localhost:80/docs for Swagger UI

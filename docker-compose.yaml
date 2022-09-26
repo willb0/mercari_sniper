@@ -5,5 +5,13 @@ services:
       - "80:80"
     networks:
       - main
+  dashboard:
+    environment:
+      PYTHONUNBUFFERED: 1
+    build: ./src/dashboard
+    ports:
+      - "81:81"
+    networks:
+      - main
 networks:
   main:
