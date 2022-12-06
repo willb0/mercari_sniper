@@ -128,13 +128,14 @@ def put_in_redis(request:SearchRequest,response:SearchResponse,r:Redis) -> List[
     redis_res = r.get(request_data)
     if redis_res is not None:
         old,new = json.loads(redis_res),json.loads(response.json(ensure_ascii=False))
-        
         diff = json.loads(jd.diff(old,new,dump=True))
-        print(diff)
+        ret = []
         i = '$insert'
         if i in diff:
-            return [MercariItem(**k) for _,k in diff[i]['items']]
+            ret =  [MercariItem(**k) for _,k in diff[i]['items']]
         if 'items' in diff:
-            return [MercariItem(**k) for _,k in diff['items'][i]]
+            print(diff['items'])
+            ret = [MercariItem(**k) for _,k in diff['items'].items()]
+        return ret
     r.set(request_data,response.json(ensure_ascii=False))
     return []

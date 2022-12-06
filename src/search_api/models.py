@@ -27,8 +27,15 @@ class SearchRequest(BaseModel):
     class Config:
         use_enum_values = True
 
+class SignupRequest(BaseModel):
+    search: SearchRequest
+    phone_number: int
+
 
 class SearchResponse(BaseModel):
     url: str
     request: SearchRequest
     items: List[MercariItem]
+
+
+

@@ -12,4 +12,4 @@ COPY ./ /usr/src/dashboard/
 
 EXPOSE 81
 
-CMD ["streamlit", "run", "dash.py", "--server.port","81"]
+CMD ["streamlit", "run", "search_dashboard.py", "--server.port","81"]
