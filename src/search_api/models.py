@@ -22,6 +22,7 @@ class SearchRequest(BaseModel):
     clothing_size: bool
     sizes: List[str]
     new_order: bool
+    num_items:int
 
     class Config:
         use_enum_values = True

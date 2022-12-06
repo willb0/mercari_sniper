@@ -7,8 +7,12 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
+from redis import Redis
+import json
+import jsondiff as jd
+
 from bs4 import BeautifulSoup
-from models import MercariItem,SearchRequest,Brand
+from models import MercariItem,SearchRequest,SearchResponse,Brand
 
 categories = {
     'all' : 2,
@@ -118,3 +122,19 @@ def aggregate(request:SearchRequest) -> Tuple[str,List[MercariItem]]:
     items = extract_items(source)
     info = get_item_info(items)
     return (url,info)
+
+def put_in_redis(request:SearchRequest,response:SearchResponse,r:Redis) -> List[MercariItem]:
+    request_data = request.json(ensure_ascii=False)
+    redis_res = r.get(request_data)
+    if redis_res is not None:
+        old,new = json.loads(redis_res),json.loads(response.json(ensure_ascii=False))
+        
+        diff = json.loads(jd.diff(old,new,dump=True))
+        print(diff)
+        i = '$insert'
+        if i in diff:
+            return [MercariItem(**k) for _,k in diff[i]['items']]
+        if 'items' in diff:
+            return [MercariItem(**k) for _,k in diff['items'][i]]
+    r.set(request_data,response.json(ensure_ascii=False))
+    return []

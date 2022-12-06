@@ -3,15 +3,37 @@ services:
     build: ./src/search_api
     ports:
       - "80:80"
+    environment:
+      PYTHONUNBUFFERED: 1
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+    depends_on:
+      - redis
     networks:
       - main
   dashboard:
-    environment:
-      PYTHONUNBUFFERED: 1
     build: ./src/dashboard
     ports:
       - "81:81"
     networks:
       - main
+    depends_on:
+      - search_api
+  redis:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+    volumes: 
+      - redis:/data
+    networks:
+      - main
+
+volumes:
+  redis:
+    driver: local
+
 networks:
   main:

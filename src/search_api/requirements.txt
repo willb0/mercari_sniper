@@ -28,6 +28,7 @@ ipython==8.5.0
 ipython-genutils==0.2.0
 jedi==0.18.1
 Jinja2==3.1.2
+jsondiff
 jsonschema==4.16.0
 jupyter-core==4.11.1
 jupyter_client==7.3.5
@@ -64,6 +65,7 @@ PySocks==1.7.1
 python-dateutil==2.8.2
 python-dotenv==0.21.0
 pyzmq==23.2.1
+redis
 requests==2.28.1
 selenium==4.4.3
 Send2Trash==1.8.0
