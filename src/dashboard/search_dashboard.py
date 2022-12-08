@@ -1,13 +1,12 @@
-from ast import keyword
 import streamlit as st
 import requests
+import os
 from models import MercariItem, SearchRequest, SearchResponse
 import random
 
 API_URL = "http://search_api:80/search_mercari"
 MERCARI_IMG_URL = "https://static.mercdn.net/item/detail/orig/photos/{}_1.jpg"
 MERCARI_ITEM_URL = "https://jp.mercari.com/item/{}"
-
 
 st.title("mercari sniper")
 
@@ -58,11 +57,14 @@ with st.form("mercari_item"):
             brand=brands,
             clothing_size=clothes_or_shoes,
             sizes=sizes,
-            new_order=sort_by_new
+            new_order=sort_by_new,
+            num_items=num_items
         )
         res = requests.post(API_URL, data=request.json()).json()
         # print(res)
         res = SearchResponse(**res)
+        request_data = request.json()
+        
         items = res.items
         image_urls = [MERCARI_IMG_URL.format(item.item_id) for item in items]
         item_urls = [MERCARI_ITEM_URL.format(item.item_id) for item in items]

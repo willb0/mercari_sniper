@@ -22,12 +22,20 @@ class SearchRequest(BaseModel):
     clothing_size: bool
     sizes: List[str]
     new_order: bool
+    num_items:int
 
     class Config:
         use_enum_values = True
+
+class SignupRequest(BaseModel):
+    search: SearchRequest
+    phone_number: int
 
 
 class SearchResponse(BaseModel):
     url: str
     request: SearchRequest
     items: List[MercariItem]
+
+
+
