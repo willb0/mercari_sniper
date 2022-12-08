@@ -10,3 +10,4 @@ docker compose up
 
 youll have search api at `0.0.0.0:80/docs`
 UI to search it @ `0.0.0.0:81`
+ring
