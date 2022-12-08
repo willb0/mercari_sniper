@@ -126,16 +126,16 @@ def aggregate(request:SearchRequest) -> Tuple[str,List[MercariItem]]:
 def put_in_redis(request:SearchRequest,response:SearchResponse,r:Redis) -> List[MercariItem]:
     request_data = request.json(ensure_ascii=False)
     redis_res = r.get(request_data)
+    ret = []
     if redis_res is not None:
         old,new = json.loads(redis_res),json.loads(response.json(ensure_ascii=False))
         diff = json.loads(jd.diff(old,new,dump=True))
-        ret = []
         i = '$insert'
         if i in diff:
             ret =  [MercariItem(**k) for _,k in diff[i]['items']]
-        if 'items' in diff:
+        
+        if diff != [] and 'items' in diff:
             print(diff['items'])
-            ret = [MercariItem(**k) for _,k in diff['items'].items()]
-        return ret
+            ret = [MercariItem(**k) for _,k in diff['items'][i]]
     r.set(request_data,response.json(ensure_ascii=False))
-    return []
+    return ret
