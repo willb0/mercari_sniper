@@ -8,6 +8,8 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: 6379
       REDIS_PASSWORD: eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+      account_sid: AC1be2bb3581dfba276a2e89c52c1caf04
+      auth_token: 292dda64624f19bad1d397c5c57bbf0b
     depends_on:
       - redis
     networks:
@@ -30,6 +32,18 @@ services:
       - redis:/data
     networks:
       - main
+
+  scheduler:
+    build: ./src/scheduler
+    environment: 
+      PYTHONUNBUFFERED: 1
+      mercari_url: http://search_api:80/search_mercari
+    ports:
+      - "82:82"
+    networks:
+      - main
+    depends_on:
+      - search_api
 
 volumes:
   redis:

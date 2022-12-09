@@ -45,7 +45,6 @@ def search(request:SearchRequest) -> SearchResponse:
                     body = 'new items for your search\n' + item_str 
                 )
                 print(msg.sid)
-
     return res
 
 @app.post('/alert_signup')
